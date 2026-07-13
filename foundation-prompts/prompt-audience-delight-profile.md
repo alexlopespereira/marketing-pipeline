@@ -1,78 +1,72 @@
-# TAREFA: Extrair um Creator Style
+# TAREFA: Extrair um Audience Delight Profile
 
-Você é um analista de estilo. Vou fornecer os conteúdos que a nossa marca já
-publicou. Sua tarefa é destilar deles um arquivo `creator-style.md`.
+Você é um pesquisador de audiência. Vou fornecer material BRUTO em que minha
+audiência fala com as próprias palavras. Sua tarefa é destilar esse material
+num arquivo `audience-delight-profile.md`.
 
 ## REGRA DE OURO (a mais importante)
-Você é um SISMÓGRAFO, não um crítico literário. Registre PADRÕES MECÂNICOS,
-nunca adjetivos.
-- PROIBIDO escrever: "a voz é calorosa", "tom conversacional", "linguagem
-  empoderadora", "próxima do leitor". Adjetivos são inúteis para uma IA —
-  aplicam-se a qualquer marca.
-- OBRIGATÓRIO escrever coisas verificáveis: "frases de abertura têm 3 a 7
-  palavras", "usa fragmentos sem verbo para dar ênfase", "sempre lidera com
-  o que o leitor PODE FAZER, não com o que construímos", "nunca usa mais de
-  uma vírgula por frase".
-- Teste: se um estagiário não consegue APLICAR a regra sem interpretar,
-  a regra está vaga demais. Reescreva.
+Você é um ETNÓGRAFO, não um copywriter. Seu trabalho é REGISTRAR a linguagem
+que já existe no material — nunca melhorá-la, traduzi-la ou polí-la.
+- Se eles dizem "tá uma zona", escreva "tá uma zona". NÃO escreva
+  "há desorganização nos processos".
+- Prefira SEMPRE o verbatim (a citação literal) à paráfrase.
+- Se um termo aparece pouco, mas é vívido e específico, ele vale mais
+  que um termo genérico que aparece muito.
 
-## MATERIAL — DOIS BLOCOS SEPARADOS (isto é obrigatório)
-### BLOCO A — VENCEDORES
-[Cole os 10 conteúdos de MELHOR desempenho. Diga qual métrica define
-"melhor" (engajamento, conversão, alcance) e o número de cada um.]
+## FONTES DO MATERIAL
+[Indique de onde veio cada bloco: threads de Reddit / grupos de WhatsApp /
+transcrições de calls de vendas / tickets de suporte / comentários sobre
+concorrentes. Cole o material abaixo, separado por fonte.]
 
-### BLOCO B — PERDEDORES
-[Cole 5 a 10 conteúdos de PIOR desempenho, do mesmo período e formato.]
-
-## O TESTE DE VALIDAÇÃO (o passo que quase todo mundo pula)
-Um estilo só é real se DISCRIMINA. Antes de escrever o arquivo:
-1. Descreva os padrões que você observa nos VENCEDORES.
-2. Agora confira cada padrão contra os PERDEDORES.
-3. DESCARTE todo padrão que também aparece nos perdedores — ele não explica
-   nada, é só o jeito que a marca escreve em geral.
-4. MANTENHA apenas os padrões que separam os dois grupos.
-Se um padrão aparece nos dois blocos, ele é ruído. Diga isso explicitamente.
+## ANTES DE ESCREVER, FAÇA ESTA TRIAGEM (não me mostre este passo)
+1. Separe o que foi dito pela AUDIÊNCIA do que foi dito por VENDEDORES,
+   SUPORTE ou pela MARCA. Em calls e tickets, só as falas do CLIENTE contam.
+   Descarte a linguagem do nosso lado do balcão — ela contamina o perfil.
+2. Marque as passagens com CARGA EMOCIONAL (irritação, alívio, orgulho,
+   vergonha, ironia). É ali que mora o vocabulário verdadeiro.
+3. Ignore ruído: saudações, agradecimentos, jargão jurídico, assinaturas.
 
 ## PRODUZA O ARQUIVO NESTE FORMATO EXATO
 
 ---
-Load this file when the skill: escreve qualquer conteúdo que produza palavras
-(blog, social, e-mail, landing page, anúncio, roteiro).
-Do NOT load this file when the skill: só precisa de dados de audiência,
-posicionamento ou jornada, sem gerar texto.
+Load this file when the skill: escreve qualquer conteúdo voltado à audiência
+(posts, e-mails, anúncios, landing pages, roteiros) OU precisa de dados da
+audiência (dores, gatilhos, vocabulário).
+Do NOT load this file when the skill: só precisa de posicionamento competitivo
+ou só do caminho de compra (jornada).
 ---
 
-# Creator Style — [NOME DA MARCA]
+# Audience Delight Profile — [NOME DA MARCA]
 
-## Padrões de ritmo e estrutura
-Comprimento de frase, alternância, uso de fragmentos, parágrafos, quebras.
-Cada regra deve ser aplicável sem interpretação.
+## Quem é (uma frase, em linguagem humana — nada de firmografia)
 
-## Padrões de abertura
-Como os vencedores começam. Cite 3 aberturas literais.
+## VOCABULÁRIO REAL  ← seção mais importante
+Tabela de duas colunas. Coluna 1: a palavra/expressão que ELES usam
+(entre aspas, verbatim). Coluna 2: a versão corporativa que eles NUNCA usam.
+Mínimo 8 pares. Puxe da coluna 2 do jargão que NÓS usaríamos por reflexo.
 
-## Padrões de fechamento
-Como terminam. Cite 3 fechamentos literais.
-
-## Regras de léxico
-Palavras que a marca usa e palavras que a marca NUNCA usa.
-
-## COMPARAÇÃO  ← seção mais forte do arquivo
-Duas colunas com frases REAIS (não inventadas):
-
-| SOA como a marca | NÃO soa como a marca |
+| Ela diz | Ela NÃO diz |
 |---|---|
 
-Puxe a coluna 1 dos VENCEDORES. Puxe a coluna 2 dos PERDEDORES — e, se
-faltar material, do corporativês genérico do nosso setor.
-Mínimo 6 pares.
+## O que a faz brilhar (delight)
+O que gera alívio, orgulho ou entusiasmo genuíno. Cite o verbatim.
 
-## O QUE FOI DESCARTADO E POR QUÊ
-Liste os padrões que você observou nos vencedores MAS que também apareciam
-nos perdedores — e que por isso não entraram no arquivo. Isso me mostra que
-o teste foi feito de verdade.
+## O que ela compartilha sem ninguém pedir
+O que ela posta, encaminha ou conta para um colega por vontade própria.
 
-## EVIDÊNCIA
-Para cada padrão, aponte em qual(is) conteúdo(s) vencedor(es) ele aparece.
-Marque `[BAIXA EVIDÊNCIA]` o que aparece em menos de 3 peças.
-Marque `[INFERÊNCIA]` o que você deduziu sem base direta.
+## Do que ela reclama quando a nossa marca NÃO está na sala
+As queixas ditas entre pares — não as ditas para o nosso vendedor.
+Estas são as mais honestas.
+
+## Onde ela conversa de verdade
+Canais, comunidades, formatos.
+
+## EVIDÊNCIA (rastreabilidade)
+Para cada item acima, indique a fonte (ex.: "call de vendas, 03/2026") e
+cole 1 citação literal curta que sustenta a afirmação.
+Se algo tem POUCA evidência, marque como `[BAIXA EVIDÊNCIA]`.
+Se você teve que inferir, marque como `[INFERÊNCIA]`.
+NUNCA invente vocabulário que não esteja no material.
+
+## LACUNAS
+Liste o que o material NÃO cobre e que material eu deveria coletar em seguida.
