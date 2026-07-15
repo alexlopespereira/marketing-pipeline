@@ -1,0 +1,569 @@
+<title>Fábrica de Conteúdo Agêntica — Exercício MBA ESPM</title>
+<style>
+  :root{
+    --bg:#F1EFEA; --panel:#FBFAF7; --ink:#1A1D24; --muted:#5C5F68;
+    --line:rgba(26,29,36,.12); --line-strong:rgba(26,29,36,.22);
+    --hub:#C97A16; --hub-soft:#E0912B; --spoke:#148B7D; --spoke-soft:#1FA090;
+    --espm:#D6006A;                       /* cor institucional ESPM — troque pelo hex oficial do manual */
+    --grid:rgba(26,29,36,.05);
+    --shadow:0 1px 0 rgba(26,29,36,.04), 0 18px 40px -24px rgba(26,29,36,.35);
+    --sans:"Inter var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#12141A; --panel:#1B1E26; --ink:#ECEAE3; --muted:#9DA0A9;
+      --line:rgba(236,234,227,.14); --line-strong:rgba(236,234,227,.26);
+      --hub:#F2A83E; --hub-soft:#F2A83E; --spoke:#38BCAB; --spoke-soft:#38BCAB;
+      --espm:#F5289A;
+      --grid:rgba(236,234,227,.05);
+      --shadow:0 1px 0 rgba(0,0,0,.3), 0 22px 48px -26px rgba(0,0,0,.75);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F1EFEA; --panel:#FBFAF7; --ink:#1A1D24; --muted:#5C5F68;
+    --line:rgba(26,29,36,.12); --line-strong:rgba(26,29,36,.22);
+    --hub:#C97A16; --hub-soft:#E0912B; --spoke:#148B7D; --spoke-soft:#1FA090;
+    --espm:#D6006A;
+    --grid:rgba(26,29,36,.05); --shadow:0 1px 0 rgba(26,29,36,.04), 0 18px 40px -24px rgba(26,29,36,.35);
+  }
+  :root[data-theme="dark"]{
+    --bg:#12141A; --panel:#1B1E26; --ink:#ECEAE3; --muted:#9DA0A9;
+    --line:rgba(236,234,227,.14); --line-strong:rgba(236,234,227,.26);
+    --hub:#F2A83E; --hub-soft:#F2A83E; --spoke:#38BCAB; --spoke-soft:#38BCAB;
+    --espm:#F5289A;
+    --grid:rgba(236,234,227,.05); --shadow:0 1px 0 rgba(0,0,0,.3), 0 22px 48px -26px rgba(0,0,0,.75);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow:hidden;
+  }
+  .deck{
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+
+  .slide{
+    position:absolute; inset:0; display:none;
+    padding:clamp(28px,5vw,84px);
+    flex-direction:column; justify-content:center;
+    animation:rise .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .slide.active{display:flex}
+  @media (prefers-reduced-motion:reduce){.slide{animation:none}}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .wrap{width:min(1120px,100%); margin:0 auto}
+
+  /* type */
+  .eyebrow{
+    font-family:var(--mono); font-size:clamp(11px,1.15vw,14px); letter-spacing:.18em;
+    text-transform:uppercase; color:var(--hub); font-weight:600; margin:0 0 18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:""; width:26px; height:2px; background:var(--hub); display:inline-block}
+  h1{font-size:clamp(34px,6.4vw,78px); line-height:1.02; letter-spacing:-.02em; font-weight:800; margin:0; text-wrap:balance}
+  h2{font-size:clamp(26px,4.2vw,52px); line-height:1.05; letter-spacing:-.02em; font-weight:800; margin:0 0 8px; text-wrap:balance}
+  .lede{font-size:clamp(16px,1.9vw,23px); color:var(--muted); line-height:1.5; max-width:60ch; margin:18px 0 0}
+  p{margin:0}
+  strong{color:var(--ink); font-weight:700}
+  .hub-t{color:var(--hub)} .spoke-t{color:var(--spoke)}
+
+  /* cover — ESPM institutional lockup */
+  .cover-slide{position:relative}
+  .cover-slide::before{content:""; position:absolute; top:0; left:0; right:0; height:6px;
+    background:linear-gradient(90deg,var(--espm) 0%,var(--espm) 62%,var(--hub) 62%,var(--hub) 82%,var(--spoke) 82%)}
+  .espm-lockup{display:flex; align-items:center; gap:18px; margin-bottom:30px}
+  .espm-mark{font-weight:800; font-size:clamp(26px,3.4vw,40px); letter-spacing:.04em; color:var(--espm); line-height:1}
+  .espm-div{width:1px; height:clamp(24px,2.6vw,32px); background:var(--line-strong)}
+  .espm-course{display:flex; flex-direction:column; gap:3px}
+  .espm-course b{font-size:clamp(13px,1.35vw,16px); font-weight:700; color:var(--ink); letter-spacing:.01em}
+  .espm-course small{font-family:var(--mono); font-size:clamp(10px,1.05vw,12px); letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+  .eyebrow-espm{color:var(--espm)}
+  .eyebrow-espm::before{background:var(--espm)}
+  .cover-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:34px}
+  .pill{
+    font-family:var(--mono); font-size:13px; padding:8px 14px; border:1px solid var(--line-strong);
+    border-radius:999px; color:var(--muted); background:var(--panel);
+  }
+  .pill b{color:var(--ink); font-weight:600}
+  .cover-foot{margin-top:40px; font-family:var(--mono); font-size:13px; color:var(--muted)}
+  .cover-foot a{color:var(--spoke); text-decoration:none}
+
+  /* generic cards / grids */
+  .grid{display:grid; gap:16px; margin-top:26px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:20px 22px; box-shadow:var(--shadow);
+  }
+  .card h3{margin:0 0 8px; font-size:clamp(16px,1.6vw,20px); font-weight:700; letter-spacing:-.01em}
+  .card p{color:var(--muted); font-size:clamp(13.5px,1.35vw,16px); line-height:1.5}
+  .num{font-family:var(--mono); font-size:12px; color:var(--hub); font-weight:600; letter-spacing:.1em}
+  .kicker{font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+  .mono{font-family:var(--mono)}
+  .tag{display:inline-block; font-family:var(--mono); font-size:12px; padding:3px 9px; border-radius:6px;
+    background:color-mix(in srgb,var(--spoke) 15%,transparent); color:var(--spoke); border:1px solid color-mix(in srgb,var(--spoke) 30%,transparent)}
+  .tag.hub{background:color-mix(in srgb,var(--hub) 16%,transparent); color:var(--hub); border-color:color-mix(in srgb,var(--hub) 32%,transparent)}
+
+  ul.clean{margin:16px 0 0; padding:0; list-style:none; display:grid; gap:11px}
+  ul.clean li{display:flex; gap:12px; font-size:clamp(14px,1.5vw,18px); line-height:1.45; color:var(--ink)}
+  ul.clean li::before{content:""; flex:none; margin-top:.55em; width:8px; height:8px; border-radius:2px; background:var(--hub); transform:rotate(45deg)}
+  ul.clean li.s::before{background:var(--spoke)}
+  ul.clean li span{color:var(--muted)}
+
+  .stat{display:flex; flex-direction:column; gap:2px}
+  .stat b{font-size:clamp(26px,3.6vw,42px); font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .stat small{font-family:var(--mono); font-size:12px; letter-spacing:.05em; color:var(--muted); text-transform:uppercase}
+
+  /* hub & spoke diagram */
+  .hs{display:grid; grid-template-columns:1.15fr auto 1fr; align-items:center; gap:clamp(14px,3vw,44px); margin-top:22px}
+  @media (max-width:820px){.hs{grid-template-columns:1fr; gap:16px}}
+  .node{border-radius:14px; padding:16px 18px; border:1px solid var(--line); background:var(--panel); box-shadow:var(--shadow)}
+  .node .kicker{margin-bottom:6px}
+  .node.human{border-left:4px solid var(--muted)}
+  .hubnode{
+    border:1.5px solid var(--hub); background:color-mix(in srgb,var(--hub) 10%,var(--panel));
+    text-align:center; padding:22px 20px;
+  }
+  .hubnode .big{font-size:clamp(18px,2.1vw,26px); font-weight:800; letter-spacing:-.01em}
+  .hubnode .sub{font-family:var(--mono); font-size:12px; color:var(--hub); margin-top:6px}
+  .spokes{display:grid; gap:10px}
+  .spoke-item{display:flex; align-items:center; gap:10px; font-size:14px; padding:10px 13px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--line)}
+  .spoke-item i{flex:none; width:9px; height:9px; border-radius:999px; background:var(--spoke)}
+  .flowlabel{font-family:var(--mono); font-size:11px; color:var(--muted); text-align:center; letter-spacing:.06em}
+  .conn{display:flex; align-items:center; justify-content:center; color:var(--line-strong); font-size:28px}
+  @media (max-width:820px){.conn{transform:rotate(90deg)}}
+
+  /* stage strip */
+  .stagebar{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap}
+  .stagebar .st{flex:1; min-width:120px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--panel)}
+  .stagebar .st.on{border-color:var(--hub); background:color-mix(in srgb,var(--hub) 10%,var(--panel))}
+  .stagebar .st small{font-family:var(--mono); font-size:11px; color:var(--muted); display:block}
+  .stagebar .st b{font-size:14px; font-weight:700}
+
+  table{border-collapse:collapse; width:100%; margin-top:22px; font-size:clamp(13px,1.4vw,16.5px)}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:600}
+  td b{font-weight:700}
+  .wt{font-variant-numeric:tabular-nums; color:var(--hub); font-weight:700; font-family:var(--mono)}
+
+  /* chrome */
+  .rail{position:fixed; left:0; right:0; top:0; height:3px; background:transparent; z-index:20}
+  .rail>i{display:block; height:100%; background:linear-gradient(90deg,var(--hub),var(--spoke)); width:0; transition:width .4s cubic-bezier(.2,.7,.2,1)}
+  .hud{position:fixed; z-index:20; bottom:20px; right:22px; display:flex; align-items:center; gap:14px;
+    font-family:var(--mono); font-size:12px; color:var(--muted)}
+  .hud .count b{color:var(--ink)}
+  .nav{display:flex; gap:6px}
+  .nav button{
+    font-family:var(--mono); font-size:15px; width:36px; height:32px; border-radius:8px; cursor:pointer;
+    border:1px solid var(--line-strong); background:var(--panel); color:var(--ink); transition:.15s;
+  }
+  .nav button:hover{border-color:var(--hub); color:var(--hub)}
+  .nav button:focus-visible{outline:2px solid var(--spoke); outline-offset:2px}
+  .brand{position:fixed; z-index:20; bottom:20px; left:22px; font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.04em}
+  .brand b{color:var(--ink)}
+  .theme{position:fixed; z-index:20; top:16px; right:22px; font-family:var(--mono); font-size:12px; cursor:pointer;
+    border:1px solid var(--line-strong); background:var(--panel); color:var(--muted); border-radius:8px; padding:6px 11px}
+  .theme:hover{color:var(--hub); border-color:var(--hub)}
+  .hint{position:fixed; z-index:20; bottom:20px; left:50%; transform:translateX(-50%); font-family:var(--mono);
+    font-size:11px; color:var(--muted); opacity:.8}
+  @media (max-width:720px){.hint,.brand{display:none}}
+</style>
+
+<div class="rail"><i id="rail"></i></div>
+<button class="theme" id="theme" aria-label="Alternar tema">tema</button>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="slide active cover-slide">
+    <div class="wrap">
+      <div class="espm-lockup">
+        <span class="espm-mark">ESPM</span>
+        <span class="espm-div"></span>
+        <span class="espm-course">
+          <b>MBA · IA Aplicada ao Marketing</b>
+          <small>Exercício prático · Squads de marketing</small>
+        </span>
+      </div>
+      <p class="eyebrow eyebrow-espm">Fábrica de Conteúdo Agêntica</p>
+      <h1>Construindo uma<br><span class="hub-t">Fábrica de Conteúdo</span> Agêntica</h1>
+      <p class="lede">Um pipeline <strong>Hub-and-Spoke</strong>: uma peça central densa, feita de esforço humano, desdobrada em todos os canais por uma biblioteca de <span class="mono">skills.md</span> — sempre com humano-no-loop.</p>
+      <div class="cover-meta">
+        <span class="pill"><b>Squads</b> de 3 a 4</span>
+        <span class="pill"><b>2 semanas</b> ou workshop 4–6h</span>
+        <span class="pill"><b>Claude Code</b> · Codex · Cursor · ChatGPT</span>
+      </div>
+      <p class="cover-foot">Estudo de caso: <a href="https://www.youtube.com/@rileybrownai">Riley Brown · @rileybrownai</a> &nbsp;·&nbsp; Biblioteca: <a href="https://github.com/superamped/ai-marketing-skills">superamped/ai-marketing-skills</a></p>
+    </div>
+  </section>
+
+  <!-- 2 · THESIS -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">A tese do exercício</p>
+      <h2>Produzir ficou barato.<br><span class="hub-t">Julgar</span> ficou caro.</h2>
+      <p class="lede">A IA gera thread, carrossel e e-mail em segundos. O gargalo virou outro: escolher o ângulo certo, dar a matéria-prima da tese e cortar o que soa falso. Este exercício treina exatamente o que <em>não</em> dá para terceirizar para o modelo.</p>
+      <div class="grid g3">
+        <div class="card"><p class="num">O QUE A IA FAZ</p><h3>Volume</h3><p>Rascunha, reformata, distribui. Rápido e incansável.</p></div>
+        <div class="card"><p class="num">O QUE VOCÊ FAZ</p><h3>Julgamento</h3><p>Ângulo, prova, voz, veto. O valor que escala com você.</p></div>
+        <div class="card"><p class="num">O QUE A SKILL FAZ</p><h3>Consistência</h3><p>Congela o seu julgamento em regras aplicáveis, reutilizáveis por todo o time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · CASE: RILEY BROWN -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Estudo de caso · o laboratório vivo</p>
+      <h2>Riley Brown <span class="mono" style="font-size:.5em;color:var(--muted)">@rileybrownai</span></h2>
+      <p class="lede">Construiu <strong>+1,5 milhão de seguidores</strong> operando este modelo: parte de esforço humano, usa agentes para pesquisar, estruturar e distribuir, e roda skills <span class="spoke-t">em paralelo</span>.</p>
+      <div class="grid g4" style="margin-top:28px">
+        <div class="card stat"><b>~256 mil</b><small>inscritos no YouTube</small></div>
+        <div class="card stat"><b>~194</b><small>vídeos publicados</small></div>
+        <div class="card stat"><b>~10,4 mi</b><small>views no canal</small></div>
+        <div class="card stat"><b>1,5 mi+</b><small>seguidores (todas as redes)</small></div>
+      </div>
+      <ul class="clean" style="margin-top:22px">
+        <li>Isolou a criação de introduções numa skill própria — a <strong>Hook Outline</strong> <span class="mono">[00:05:12]</span> — porque os primeiros segundos decidem a retenção <span class="mono">[00:06:18]</span>.</li>
+        <li class="s">Opera com <strong>2 agências de edição + designer de thumbnail</strong> e agentes em Slack/Notion — nosso caso de governança <span class="mono">[00:28:30]</span>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 · HUB AND SPOKE -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">A arquitetura</p>
+      <h2>Uma peça densa vira <span class="spoke-t">todo o ecossistema</span></h2>
+      <div class="hs">
+        <div class="node human">
+          <p class="kicker">Insumo 100% humano</p>
+          <p style="font-weight:600">Entrevista · tese · notas de áudio · pesquisa própria</p>
+          <p style="color:var(--muted);font-size:14px;margin-top:6px">A skill se recusa a escrever sem isto.</p>
+        </div>
+        <div>
+          <div class="conn">→</div>
+          <div class="flowlabel">skill-hook-hub</div>
+        </div>
+        <div class="hubnode">
+          <p class="kicker" style="color:var(--hub)">HUB</p>
+          <p class="big">Artigo de fundo<br>ou videocast</p>
+          <p class="sub">+ 5 hooks · 5 gatilhos</p>
+        </div>
+      </div>
+      <div class="flowlabel" style="margin:16px 0 8px">↓ &nbsp; skill-repurposer-humanizado &nbsp; ↓</div>
+      <div class="grid g4" style="margin-top:0">
+        <div class="spoke-item"><i></i> Thread X / LinkedIn</div>
+        <div class="spoke-item"><i></i> Carrossel / Reels</div>
+        <div class="spoke-item"><i></i> Carrossel / TikTok</div>
+        <div class="spoke-item"><i></i> E-mail de engajamento</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · WHAT IS A SKILL -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">O bloco de montar</p>
+      <h2>Uma <span class="hub-t">Skill</span> é um arquivo <span class="mono" style="font-size:.7em">.md</span> de regras aplicáveis</h2>
+      <p class="lede">Não precisa programar. Quem escreve boas instruções ganha. O repositório separa duas coisas — e o exercício exige respeitar a separação.</p>
+      <div class="grid g2">
+        <div class="card">
+          <span class="tag">foundation/</span>
+          <h3 style="margin-top:12px">O cérebro da marca</h3>
+          <p><span class="mono">creator-style.md</span> (voz) · <span class="mono">audience-delight-profile.md</span> (dores e vocabulário). Gerados uma vez, do material humano real.</p>
+        </div>
+        <div class="card">
+          <span class="tag hub">skills/</span>
+          <h3 style="margin-top:12px">As mãos</h3>
+          <p>Pesquisar, escrever o Hub, gerar hooks, repurpose. Toda skill começa carregando <em>só</em> a foundation que importa para a tarefa.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px; border-left:4px solid var(--hub)">
+        <p class="num">REGRA DE OURO DA CASA</p>
+        <p style="color:var(--ink);font-size:clamp(15px,1.7vw,20px);line-height:1.5;margin-top:6px">A skill é um <strong>sismógrafo, não um crítico literário.</strong> "Tom conversacional" é lixo. <span class="hub-t">"Frase de abertura tem 3 a 7 palavras"</span> é uma regra. Se um estagiário não aplica sem interpretar, reescreva.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · THE LIBRARY -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">A biblioteca da marca · 3 skills customizadas</p>
+      <h2>Adaptadas de skills que <span class="spoke-t">existem de verdade</span></h2>
+      <table>
+        <thead><tr><th>Sua skill (.md)</th><th>Etapa</th><th>Base no superamped/ai-marketing-skills</th></tr></thead>
+        <tbody>
+          <tr><td><b class="mono">skill-pesquisa</b></td><td>1</td><td>Competitor Content Analysis + Keyword Research</td></tr>
+          <tr><td><b class="mono">skill-hook-hub</b></td><td>2</td><td>Content Strategy + Ad Angles / Persuasion</td></tr>
+          <tr><td><b class="mono">skill-repurposer-humanizado</b></td><td>3</td><td>Content Repurposer + Humanizer / Anti-AI</td></tr>
+        </tbody>
+      </table>
+      <p class="lede" style="margin-top:24px">O aluno não parte do zero: adapta uma biblioteca real (18 skills, 5 categorias) para a voz e a vertical da própria marca. É engenharia de instrução, não cópia.</p>
+    </div>
+  </section>
+
+  <!-- 7 · STAGE 1 -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Etapa 1 · Pesquisa &amp; Análise de Gap</p>
+      <div class="stagebar">
+        <div class="st on"><small>ETAPA 1</small><b>Pesquisa</b></div>
+        <div class="st"><small>ETAPA 2</small><b>Hub + Hooks</b></div>
+        <div class="st"><small>ETAPA 3</small><b>Repurpose</b></div>
+        <div class="st"><small>ETAPA 4</small><b>Governança</b></div>
+      </div>
+      <h2 style="margin-top:22px">Onde ninguém olhou ainda</h2>
+      <div class="grid g2">
+        <ul class="clean">
+          <li>Escolher <strong>3 referências</strong> na vertical — em aula, uma delas é o canal real do Riley Brown.</li>
+          <li>Adaptar <span class="mono">skill-pesquisa.md</span> para analisar o conteúdo de melhor performance.</li>
+          <li>Separar <strong>mecanismo</strong> de <strong>assunto</strong>: "abre com promessa de tempo comprimido" ≠ "vídeo sobre IA".</li>
+        </ul>
+        <div class="card" style="border-left:4px solid var(--spoke)">
+          <p class="num">ENTREGÁVEL DA ETAPA</p>
+          <h3 style="margin-top:8px">Relatório de gap</h3>
+          <p><strong>3 ângulos inexplorados</strong>, cada um aprovado no teste: a audiência procura? as referências ignoram? temos autoridade? — mais a lista do que foi <em>descartado</em>. Sem descarte, não houve teste.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · STAGE 2 -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Etapa 2 · A peça-pivô e a Hook Skill</p>
+      <div class="stagebar">
+        <div class="st"><small>ETAPA 1</small><b>Pesquisa</b></div>
+        <div class="st on"><small>ETAPA 2</small><b>Hub + Hooks</b></div>
+        <div class="st"><small>ETAPA 3</small><b>Repurpose</b></div>
+        <div class="st"><small>ETAPA 4</small><b>Governança</b></div>
+      </div>
+      <h2 style="margin-top:22px">O Hub nasce de <span class="hub-t">gente</span>, não do modelo</h2>
+      <p class="lede">Alimente o agente com referência 100% humana → gere o Hub (~1.200 palavras ou roteiro de 15 min) → depois, uma skill dedicada só a ganchos.</p>
+      <div class="grid g3" style="margin-top:22px">
+        <div class="card"><p class="num">GATILHO 01</p><h3>Contrariante</h3><p>Desafia uma crença aceita.</p></div>
+        <div class="card"><p class="num">GATILHO 02</p><h3>História pessoal</h3><p>Começa no meio da cena, em 1ª pessoa.</p></div>
+        <div class="card"><p class="num">GATILHO 03</p><h3>Dado chocante</h3><p>Abre com um número que faz parar.</p></div>
+        <div class="card"><p class="num">GATILHO 04</p><h3>Curiosity gap</h3><p>Promete uma resposta que ainda não deu.</p></div>
+        <div class="card"><p class="num">GATILHO 05</p><h3>Prova / autoridade</h3><p>Ancora num resultado verificável.</p></div>
+        <div class="card" style="border-left:4px solid var(--hub)"><p class="num">A REGRA</p><h3>5 gatilhos distintos</h3><p>Estruturas diferentes, não sinônimos. Cada hook amarrada a uma prova.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · STAGE 3 -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Etapa 3 · Repurposing &amp; Humanização</p>
+      <div class="stagebar">
+        <div class="st"><small>ETAPA 1</small><b>Pesquisa</b></div>
+        <div class="st"><small>ETAPA 2</small><b>Hub + Hooks</b></div>
+        <div class="st on"><small>ETAPA 3</small><b>Repurpose</b></div>
+        <div class="st"><small>ETAPA 4</small><b>Governança</b></div>
+      </div>
+      <h2 style="margin-top:22px">O Teste do <span class="spoke-t">"Taste"</span> humano</h2>
+      <div class="grid g2">
+        <div class="card">
+          <p class="num">CAMADA 1 — DISTRIBUIR</p>
+          <h3>Content Repurposer</h3>
+          <p>1 Hub → thread + 2 carrosséis/Reels + e-mail. Cada plataforma carrega <em>uma</em> ideia, não o Hub comprimido.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--spoke)">
+          <p class="num">CAMADA 2 — HUMANIZAR</p>
+          <h3>Anti-AI Tells</h3>
+          <p>Caçar e remover <span class="mono">"mergulhe"</span>, <span class="mono">"revolucionário"</span>, <span class="mono">"no cenário atual"</span> · quebrar paralelismos · injetar a opinião da marca.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px; border-left:4px solid var(--hub)">
+        <p class="num">ENTREGA OBRIGATÓRIA</p>
+        <p style="color:var(--ink);font-size:clamp(15px,1.7vw,20px);margin-top:6px">Portfólio <strong>ANTES × DEPOIS</strong> lado a lado. O valor está no comparativo — não no "depois" sozinho.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · STAGE 4 -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Etapa 4 · Orquestração &amp; Governança — o desafio MBA</p>
+      <div class="stagebar">
+        <div class="st"><small>ETAPA 1</small><b>Pesquisa</b></div>
+        <div class="st"><small>ETAPA 2</small><b>Hub + Hooks</b></div>
+        <div class="st"><small>ETAPA 3</small><b>Repurpose</b></div>
+        <div class="st on"><small>ETAPA 4</small><b>Governança</b></div>
+      </div>
+      <h2 style="margin-top:22px">Deixar de usar agentes. Passar a <span class="hub-t">geri-los</span>.</h2>
+      <div class="grid g2">
+        <div class="card">
+          <p class="num">PARALELISMO</p>
+          <h3>Multiplayer Agents</h3>
+          <p>Fluxograma do pipeline com agentes simultâneos: A faz repurpose p/ LinkedIn enquanto B audita SEO do blog via Notion <span class="mono">[00:04:10]</span>.</p>
+        </div>
+        <div class="card">
+          <p class="num">GOVERNANÇA · 1 PÁGINA</p>
+          <h3>Humano-no-loop</h3>
+          <p>Quem edita a voz da marca? O que a agência terceirizada acessa? O que vai ao ar sem aprovação — e o que <em>nunca</em> vai? <span class="mono">[00:30:05]</span></p>
+        </div>
+      </div>
+      <ul class="clean" style="margin-top:18px">
+        <li>Agente <strong>nunca</strong> edita <span class="mono">foundation/</span> nem publica sozinho.</li>
+        <li class="s">Todo número tem fonte rastreável antes de qualquer publicação.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 11 · DELIVERABLES -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Entregáveis</p>
+      <h2>O que cada squad entrega</h2>
+      <div class="grid g3" style="margin-top:26px">
+        <div class="card"><p class="num">01</p><h3>Biblioteca de Skills</h3><p>≥ 3 arquivos <span class="mono">.md</span> customizados + a <span class="mono">foundation/</span> da marca. Em <span class="mono">.zip</span> ou repositório.</p></div>
+        <div class="card"><p class="num">02</p><h3>Portfólio Antes × Depois</h3><p>O Hub e os Spokes, com o output bruto da IA vs. a versão curada pelo time.</p></div>
+        <div class="card"><p class="num">03</p><h3>Apresentação de 10 min</h3><p>Defesa da arquitetura, ganho de produtividade honesto e estratégia de governança para escalar.</p></div>
+      </div>
+      <p class="lede" style="margin-top:24px">Peso maior no que é difícil de terceirizar: qualidade do gap, humanização real e governança — não no volume gerado.</p>
+    </div>
+  </section>
+
+  <!-- 12 · RUBRIC -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Rubrica de avaliação · 100 pontos</p>
+      <h2>O que separa 10 de 5</h2>
+      <table>
+        <thead><tr><th>Critério</th><th style="text-align:right">Peso</th><th>Teto se…</th></tr></thead>
+        <tbody>
+          <tr><td><b>Biblioteca de Skills</b></td><td class="wt" style="text-align:right">20</td><td>regra genérica, sem roteamento de foundation</td></tr>
+          <tr><td><b>Humanização (antes/depois)</b></td><td class="wt" style="text-align:right">20</td><td>entregou só o "depois"</td></tr>
+          <tr><td><b>Qualidade do gap</b></td><td class="wt" style="text-align:right">15</td><td>sem seção de descarte</td></tr>
+          <tr><td><b>Hub ancorado em insumo humano</b></td><td class="wt" style="text-align:right">15</td><td>tese que serve para qualquer marca</td></tr>
+          <tr><td><b>Orquestração + governança</b></td><td class="wt" style="text-align:right">15</td><td>ignora permissões de terceiros</td></tr>
+          <tr><td><b>Hooks</b></td><td class="wt" style="text-align:right">10</td><td>5 sinônimos, não 5 estruturas</td></tr>
+          <tr><td><b>Apresentação executiva</b></td><td class="wt" style="text-align:right">5</td><td>ganho sem tempo de revisão humana</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 13 · LOGISTICS -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Como rodar</p>
+      <h2>Logística &amp; ferramentas</h2>
+      <div class="grid g2">
+        <div class="card">
+          <p class="num">FORMATO</p>
+          <ul class="clean" style="margin-top:10px">
+            <li>Squads de <strong>3 a 4</strong> alunos.</li>
+            <li>Workshop de <strong>4–6h</strong> ou <strong>2 semanas</strong> (entrega intermediária ao fim da semana 1).</li>
+            <li>3 demonstrações ao vivo — todas usando o canal do Riley Brown.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="num">FERRAMENTAS</p>
+          <ul class="clean" style="margin-top:10px">
+            <li class="s">Agente: Claude Code, Codex, Cursor <em>ou</em> ChatGPT com <span class="mono">.md</span>.</li>
+            <li class="s">Colaboração: Notion, Slack ou Google Docs.</li>
+            <li class="s">Repositório-base: <span class="mono">superamped/ai-marketing-skills</span> + o pacote da aula.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="lede" style="margin-top:22px">Todo o pacote — skills, insumos, prompts prontos, templates e rubrica — acompanha estes slides.</p>
+    </div>
+  </section>
+
+  <!-- 14 · CLOSE -->
+  <section class="slide">
+    <div class="wrap">
+      <p class="eyebrow">Comecem</p>
+      <h1>A IA gera o volume.<br><span class="spoke-t">O taste é de vocês.</span></h1>
+      <p class="lede">Etapa 1 abre agora: escolham a marca, escolham as 3 referências e adaptem a <span class="mono">skill-pesquisa.md</span>. Ao fim de duas semanas, cada squad terá uma fábrica de conteúdo que carrega a voz da própria marca — e sabe onde o humano precisa dizer não.</p>
+      <div class="cover-meta">
+        <span class="pill"><b>1.</b> Marca + 3 referências</span>
+        <span class="pill"><b>2.</b> Hub + 5 hooks</span>
+        <span class="pill"><b>3.</b> Spokes humanizados</span>
+        <span class="pill"><b>4.</b> Governança</span>
+      </div>
+      <p class="cover-foot">IA Aplicada ao Marketing · MBA ESPM &nbsp;·&nbsp; Fábrica de Conteúdo Agêntica</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="brand"><b>Fábrica de Conteúdo Agêntica</b> · MBA ESPM</div>
+<p class="hint" id="hint">← → para navegar · F tela cheia</p>
+<div class="hud">
+  <span class="count"><b id="cur">1</b> / <span id="tot">14</span></span>
+  <div class="nav">
+    <button id="prev" aria-label="Slide anterior">‹</button>
+    <button id="next" aria-label="Próximo slide">›</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0, n = slides.length;
+  var rail = document.getElementById('rail');
+  var cur = document.getElementById('cur');
+  document.getElementById('tot').textContent = n;
+
+  function show(k){
+    i = Math.max(0, Math.min(n-1, k));
+    slides.forEach(function(s,idx){ s.classList.toggle('active', idx===i); });
+    rail.style.width = ((i)/(n-1)*100) + '%';
+    cur.textContent = i+1;
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0); }
+    else if(e.key==='End'){ show(n-1); }
+    else if(e.key==='f'||e.key==='F'){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen && document.exitFullscreen(); }
+    }
+  });
+
+  // click zones (advance on right, back on left) — but ignore clicks on links/buttons
+  document.getElementById('deck').addEventListener('click', function(e){
+    if(e.target.closest('a,button')) return;
+    if(e.clientX > window.innerWidth*0.5){ next(); } else { prev(); }
+  });
+
+  // hide hint after first interaction
+  var hint = document.getElementById('hint');
+  function hideHint(){ if(hint){ hint.style.transition='opacity .4s'; hint.style.opacity='0'; } }
+  document.addEventListener('keydown', hideHint, {once:true});
+  document.getElementById('deck').addEventListener('click', hideHint, {once:true});
+
+  // theme toggle — start from the OS preference, then flip explicitly
+  var root = document.documentElement;
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.getElementById('theme').addEventListener('click', function(){
+    dark = !dark;
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+  });
+
+  show(0);
+})();
+</script>
