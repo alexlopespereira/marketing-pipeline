@@ -4,6 +4,7 @@
     --bg:#F1EFEA; --panel:#FBFAF7; --ink:#1A1D24; --muted:#5C5F68;
     --line:rgba(26,29,36,.12); --line-strong:rgba(26,29,36,.22);
     --hub:#C97A16; --hub-soft:#E0912B; --spoke:#148B7D; --spoke-soft:#1FA090;
+    --espm:#D6006A;                       /* cor institucional ESPM — troque pelo hex oficial do manual */
     --grid:rgba(26,29,36,.05);
     --shadow:0 1px 0 rgba(26,29,36,.04), 0 18px 40px -24px rgba(26,29,36,.35);
     --sans:"Inter var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
@@ -14,6 +15,7 @@
       --bg:#12141A; --panel:#1B1E26; --ink:#ECEAE3; --muted:#9DA0A9;
       --line:rgba(236,234,227,.14); --line-strong:rgba(236,234,227,.26);
       --hub:#F2A83E; --hub-soft:#F2A83E; --spoke:#38BCAB; --spoke-soft:#38BCAB;
+      --espm:#F5289A;
       --grid:rgba(236,234,227,.05);
       --shadow:0 1px 0 rgba(0,0,0,.3), 0 22px 48px -26px rgba(0,0,0,.75);
     }
@@ -22,12 +24,14 @@
     --bg:#F1EFEA; --panel:#FBFAF7; --ink:#1A1D24; --muted:#5C5F68;
     --line:rgba(26,29,36,.12); --line-strong:rgba(26,29,36,.22);
     --hub:#C97A16; --hub-soft:#E0912B; --spoke:#148B7D; --spoke-soft:#1FA090;
+    --espm:#D6006A;
     --grid:rgba(26,29,36,.05); --shadow:0 1px 0 rgba(26,29,36,.04), 0 18px 40px -24px rgba(26,29,36,.35);
   }
   :root[data-theme="dark"]{
     --bg:#12141A; --panel:#1B1E26; --ink:#ECEAE3; --muted:#9DA0A9;
     --line:rgba(236,234,227,.14); --line-strong:rgba(236,234,227,.26);
     --hub:#F2A83E; --hub-soft:#F2A83E; --spoke:#38BCAB; --spoke-soft:#38BCAB;
+    --espm:#F5289A;
     --grid:rgba(236,234,227,.05); --shadow:0 1px 0 rgba(0,0,0,.3), 0 22px 48px -26px rgba(0,0,0,.75);
   }
 
@@ -71,7 +75,18 @@
   strong{color:var(--ink); font-weight:700}
   .hub-t{color:var(--hub)} .spoke-t{color:var(--spoke)}
 
-  /* cover */
+  /* cover — ESPM institutional lockup */
+  .cover-slide{position:relative}
+  .cover-slide::before{content:""; position:absolute; top:0; left:0; right:0; height:6px;
+    background:linear-gradient(90deg,var(--espm) 0%,var(--espm) 62%,var(--hub) 62%,var(--hub) 82%,var(--spoke) 82%)}
+  .espm-lockup{display:flex; align-items:center; gap:18px; margin-bottom:30px}
+  .espm-mark{font-weight:800; font-size:clamp(26px,3.4vw,40px); letter-spacing:.04em; color:var(--espm); line-height:1}
+  .espm-div{width:1px; height:clamp(24px,2.6vw,32px); background:var(--line-strong)}
+  .espm-course{display:flex; flex-direction:column; gap:3px}
+  .espm-course b{font-size:clamp(13px,1.35vw,16px); font-weight:700; color:var(--ink); letter-spacing:.01em}
+  .espm-course small{font-family:var(--mono); font-size:clamp(10px,1.05vw,12px); letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+  .eyebrow-espm{color:var(--espm)}
+  .eyebrow-espm::before{background:var(--espm)}
   .cover-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:34px}
   .pill{
     font-family:var(--mono); font-size:13px; padding:8px 14px; border:1px solid var(--line-strong);
@@ -172,9 +187,17 @@
 <div class="deck" id="deck">
 
   <!-- 1 · COVER -->
-  <section class="slide active">
+  <section class="slide active cover-slide">
     <div class="wrap">
-      <p class="eyebrow">IA Aplicada ao Marketing · MBA ESPM</p>
+      <div class="espm-lockup">
+        <span class="espm-mark">ESPM</span>
+        <span class="espm-div"></span>
+        <span class="espm-course">
+          <b>MBA · IA Aplicada ao Marketing</b>
+          <small>Exercício prático · Squads de marketing</small>
+        </span>
+      </div>
+      <p class="eyebrow eyebrow-espm">Fábrica de Conteúdo Agêntica</p>
       <h1>Construindo uma<br><span class="hub-t">Fábrica de Conteúdo</span> Agêntica</h1>
       <p class="lede">Um pipeline <strong>Hub-and-Spoke</strong>: uma peça central densa, feita de esforço humano, desdobrada em todos os canais por uma biblioteca de <span class="mono">skills.md</span> — sempre com humano-no-loop.</p>
       <div class="cover-meta">
